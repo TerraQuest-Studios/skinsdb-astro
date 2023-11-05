@@ -1,4 +1,4 @@
-import mariadb from "mariadb";
+import mariadb from "mysql2/promise";
 
 //this ..... mess of a file exists so that i can fix these sins later
 

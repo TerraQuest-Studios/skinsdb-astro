@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/node": "^6.0.3",
     "astro": "^3.4.3",
-    "mariadb": "^3.2.2"
+    "mariadb": "^3.2.2",
+    "mysql2": "^3.6.3"
   }
 }
