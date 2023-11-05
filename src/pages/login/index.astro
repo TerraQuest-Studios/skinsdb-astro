@@ -1,10 +1,13 @@
 ---
 // src/pages/login.astro
 //import { auth } from "../lib/lucia";
+import Layout from '../../layouts/bulma.astro';
 
 const session = await Astro.locals.auth.validate();
 if (session) return Astro.redirect("/portal", 302); // redirect to profile page
 ---
 
-<h1>Sign in</h1>
-<a href="/login/github">Sign in with GitHub</a>
+<Layout title="Login">
+    <h1>Sign in</h1>
+    <a href="/login/github">Sign in with GitHub</a>
+</Layout>
