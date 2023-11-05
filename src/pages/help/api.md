@@ -1,9 +1,13 @@
+---
+layout: ../../layouts/bulma.astro
+title: SkinsDB API Reference
+---
 # API Reference
 
 Returns a response in the following format  
 ```json
 {
-    "sucess": true,                 //boolean
+    "success": true,                 //boolean
     "message": "server message",    //a message from the server
     "page": 1,                      //curent page you are on
     "pages": 18,                    //max number of pages
