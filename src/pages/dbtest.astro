@@ -1,0 +1,10 @@
+---
+import {db} from '../classes/db.js';
+
+let testResult = await db.query("SELECT * FROM content_licenses");
+let testResult2 = await db.query("SELECT * FROM content_licenses WHERE id=?", [1]);
+console.log(testResult);
+console.log(testResult2);
+console.log("hiii");
+---
+<h1>DB TEST</h1>
