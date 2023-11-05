@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "@astrojs/node": "^6.0.3",
+    "@lucia-auth/adapter-mysql": "^2.1.0",
+    "@lucia-auth/oauth": "^3.4.0",
     "astro": "^3.4.3",
+    "lucia": "^2.7.3",
     "mariadb": "^3.2.2",
     "mysql2": "^3.6.3"
   }
