@@ -1,5 +1,5 @@
 ---
-import {db} from '../classes/db.js';
+import {db} from '../lib/db.js';
 
 let testResult = await db.query("SELECT * FROM content_licenses");
 let testResult2 = await db.query("SELECT * FROM content_licenses WHERE id=?", [1]);
