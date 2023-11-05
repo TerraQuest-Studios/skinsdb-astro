@@ -1,0 +1,31 @@
+---
+interface Props {
+    id: string,
+	title: string;
+	name: string;
+	author: string;
+    license: string;
+    image: string;
+}
+
+const { id, title, name, author, license, image } = Astro.props;
+---
+<div class="skin_card box">
+    <img src={image}>
+    <div class="skin_card_text_wrapper">
+        <p>ID: {id}</p>
+        <p>Name: {title}</p>
+        <p>Author: {author}</p>
+        <p>License: {license}</p>
+    </div>
+</div>
+<style>
+    .skin_card {
+        display: flex;
+        gap: 2rem;
+        max-width: 20rem;
+        width: 20rem;
+        align-items: center;
+        margin: 0;
+    }
+</style>

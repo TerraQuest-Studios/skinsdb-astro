@@ -24,9 +24,11 @@ const { title } = Astro.props.frontmatter || Astro.props;
 	</head>
 	<body>
 		<Nav />
+		<br>
 		<main class="contain">
 			<slot />
 		</main>
+		<br>
 		<Footer />
 	</body>
 </html>
