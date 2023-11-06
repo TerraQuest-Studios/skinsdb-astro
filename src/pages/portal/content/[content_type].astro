@@ -1,11 +1,16 @@
 ---
 import Layout from '../../../layouts/portal.astro';
 import {db} from '../../../lib/db.js';
+import {User} from '../../../lib/user.js';
 
 // @ts-ignore
 const session = await Astro.locals.auth.validate();
 // @ts-ignore
 if (!session) return Astro.redirect("/login", 302);
+let user = await new User(session.user.userId);
+if(user.group.id!=1) {
+	return new Response("permission denied", {status: 403}); //TODO: make this a 404 page - default or otherwise
+}
 
 // @ts-ignore
 const { content_type } = Astro.params;
