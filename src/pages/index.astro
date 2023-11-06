@@ -7,6 +7,7 @@ import Skincard from '../components/skincard.astro';
 let skinsData = await db.query("SELECT cs.*, cl.name as licensename FROM content_skins cs LEFT JOIN content_licenses cl ON cl.id=cs.license WHERE state>=1");
 //console.log(skinsData[0]);
 
+// @ts-ignore
 skinsData[0].forEach((skin) => {
 	console.log(skin.name);
 });
@@ -25,16 +26,20 @@ skinsData[0].forEach((skin) => {
 		<h1 class="title">Skins</h1>
 		<hr>
 		<div class="skins_wrap">
-			{skinsData[0].map((skin) => (
-				<Skincard
-					id={skin.id}
-					title={skin.title}
-					name={skin.name}
-					author={skin.author}
-					license={skin.licensename}
-					image={skin.imagedata}
-				/>
-			))}
+			
+			{
+				// @ts-ignore
+				skinsData[0].map((skin) => (
+					<Skincard
+						id={skin.id}
+						title={skin.title}
+						name={skin.name}
+						author={skin.author}
+						license={skin.licensename}
+						image={skin.imagedata}
+					/>
+				))
+			}
 		</div>
 	</section>
 </Layout>
