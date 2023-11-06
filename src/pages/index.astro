@@ -5,10 +5,10 @@ import {db} from '../lib/db.js';
 import Skincard from '../components/skincard.astro';
 
 let skinsData = await db.query("SELECT cs.*, cl.name as licensename FROM content_skins cs LEFT JOIN content_licenses cl ON cl.id=cs.license WHERE state>=1");
-//console.log(skinsData[0]);
+//console.log(skinsData);
 
 // @ts-ignore
-skinsData[0].forEach((skin) => {
+skinsData.forEach((skin) => {
 	console.log(skin.name);
 });
 ---
@@ -29,7 +29,7 @@ skinsData[0].forEach((skin) => {
 			
 			{
 				// @ts-ignore
-				skinsData[0].map((skin) => (
+				skinsData.map((skin) => (
 					<Skincard
 						id={skin.id}
 						title={skin.title}

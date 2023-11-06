@@ -16,9 +16,9 @@ class Database {
         let conn;
         try {
             conn = await pool.getConnection();
-            let result = conn.execute(sql, params);
+            let result = await conn.execute(sql, params);
             conn.release();
-            return result;
+            return result[0]; //return the result of the query, not scheme info
         } catch(err) {
             console.log(err);
         }
