@@ -1,0 +1,51 @@
+---
+import {User} from '../lib/user.js';
+
+const session = await Astro.locals.auth.validate();
+let user;
+if(session) {
+	user = await new User(session.user.userId);
+}
+---
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item navbar-mainicon" href="/">
+            <img src="/favicon.png">
+            <span>SkinsDB</span>
+        </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+        { (user && user.group.id==1) &&
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">Content</a>
+        
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" href="/portal/content/skins">Skins</a>
+                    <a class="navbar-item" href="/portal/content/licenses">Licenses</a>
+                </div>
+            </div>
+        }
+
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    <a class="button is-primary" href="/" target="_blank">Front End</a>
+                    <form method="post" action="/logout">
+                        <button class="button is-primary" type="submit" value="Sign out">Logout</button> <!-- make this work -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<style>
+    .navbar-mainicon {
+        display: flex;
+        gap: 0.25rem;
+
+        &:hover {
+            color: #fff !important;
+        }
+    }
+</style>

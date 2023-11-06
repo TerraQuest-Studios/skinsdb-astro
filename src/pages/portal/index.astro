@@ -1,5 +1,5 @@
 ---
-import Layout from '../../layouts/bulma.astro';
+import Layout from '../../layouts/portal.astro';
 
 const session = await Astro.locals.auth.validate();
 if (!session) return Astro.redirect("/login", 302);
