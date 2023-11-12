@@ -4,7 +4,7 @@ import SkinCard from '../components/skincard.astro';
 import {db} from '../lib/db.js';
 import Skincard from '../components/skincard.astro';
 
-let skinsData = await db.query("SELECT cs.*, cl.name as licensename FROM content_skins cs LEFT JOIN content_licenses cl ON cl.id=cs.license WHERE cs.state>=1");
+let skinsData = await db.query("SELECT cs.*, cl.name as licensename, uf.display_name as author FROM content_skins cs LEFT JOIN content_licenses cl ON cl.id=cs.license LEFT JOIN user_fields uf ON cs.author=uf.id WHERE cs.state>=1");
 //console.log(skinsData);
 
 // @ts-ignore
@@ -14,14 +14,6 @@ let skinsData = await db.query("SELECT cs.*, cl.name as licensename FROM content
 ---
 
 <Layout title="SkinsDB">
-	<style>
-		.skins_wrap {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 2rem;
-			justify-content: center;
-		}
-	</style>
 	<section>
 		<h1 class="title">Skins</h1>
 		<hr>
@@ -42,4 +34,12 @@ let skinsData = await db.query("SELECT cs.*, cl.name as licensename FROM content
 			}
 		</div>
 	</section>
+	<style>
+		.skins_wrap {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 2rem;
+			justify-content: center;
+		}
+	</style>
 </Layout>
