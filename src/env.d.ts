@@ -11,3 +11,7 @@ declare namespace App {
 		auth: import("lucia").AuthRequest;
 	}
 }
+
+declare interface String {
+	ucwords() : string;
+}

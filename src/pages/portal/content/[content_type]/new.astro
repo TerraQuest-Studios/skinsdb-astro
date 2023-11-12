@@ -2,6 +2,7 @@
 import Layout from '../../../../layouts/portal.astro';
 import {db} from '../../../../lib/db.js';
 import {User} from '../../../../lib/user.js';
+import '../../../../lib/string.js';
 
 // @ts-ignore
 const session = await Astro.locals.auth.validate();
@@ -34,6 +35,6 @@ if(!tableExists[0]) {
 } */
 ---
 
-<Layout title={content_type + " Content"}>
+<Layout title={content_type.ucwords() + " Content"}>
 	<p>CREATE NEW ITEM HERE</p>
 </Layout>
