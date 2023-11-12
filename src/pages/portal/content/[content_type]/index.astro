@@ -25,7 +25,7 @@ if(!tableExists[0]) {
 }
 
 //TODO: see if this is better securable
-let content = await db.query(`SELECT id,name,state,author FROM ${tableExists[0].TABLE_NAME}`);
+let content = await db.query(`SELECT c.id,c.name,c.state,uf.display_name as author FROM ${tableExists[0].TABLE_NAME} c JOIN auth_user u ON c.author=u.id JOIN user_fields uf ON u.id=uf.id`);
 //console.log(content);
 ---
 
