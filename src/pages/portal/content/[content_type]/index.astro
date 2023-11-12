@@ -1,0 +1,63 @@
+---
+import Layout from '../../../../layouts/portal.astro';
+import {db} from '../../../../lib/db.js';
+import {User} from '../../../../lib/user.js';
+
+function ucwords(input) {
+	return (input + '').replace(/^(.)|\s+(.)/g, function ($1) {
+		return $1.toUpperCase();
+	});
+}
+
+// @ts-ignore
+const session = await Astro.locals.auth.validate();
+// @ts-ignore
+if (!session) return Astro.redirect("/login", 302);
+let user = await new User(session.user.userId);
+if(user.group.id!=1) {
+	return new Response("permission denied", {status: 403}); //TODO: make this a 404 page - default or otherwise
+}
+
+// @ts-ignore
+const { content_type } = Astro.params;
+//console.log(content_type);
+
+let tableExists = await db.query(`SELECT * FROM information_schema.tables WHERE table_name=?`, ["content_" + content_type]);
+//console.log(tableExists);
+if(!tableExists[0]) {
+	// @ts-ignore
+	return new Response("content type not found", {status: 404}); //TODO: make this a 404 page - default or otherwise
+}
+
+//TODO: see if this is better securable
+let content = await db.query(`SELECT id,name,state,author FROM ${tableExists[0].TABLE_NAME}`);
+console.log(content);
+---
+
+<Layout title={ucwords(content_type) + " Content"}>
+	<!-- <pre>{JSON.stringify(content, null, 2)}</pre> -->
+	<div style="display: flex; justify-content: space-between">
+		<h1 class="title is-1">{ucwords(content_type)} Content</h1>
+		<a href={`/portal/content/${content_type}/new`} class="button is-primary">New</a>
+	</div>
+	<table class="table is-fullwidth">
+		<thead>
+			<tr>
+			  	<th>State</th>
+				<th>Name</th>
+				<th>Author</th>
+			</tr>
+		</thead>
+		<tbody>
+			{	// @ts-ignore
+				content.map((item)=>(
+					<tr>
+						<td>{item.state}</td>
+						<td><a href={`/portal/content/${content_type}/${item.id}`}>{item.name}</a></td>
+						<td>{item.author}</td>
+					</tr>
+				))
+			}
+		</tbody>
+	</table>
+</Layout>

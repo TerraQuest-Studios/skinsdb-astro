@@ -4,7 +4,7 @@ import SkinCard from '../components/skincard.astro';
 import {db} from '../lib/db.js';
 import Skincard from '../components/skincard.astro';
 
-let skinsData = await db.query("SELECT cs.*, cl.name as licensename FROM content_skins cs LEFT JOIN content_licenses cl ON cl.id=cs.license WHERE state>=1");
+let skinsData = await db.query("SELECT cs.*, cl.name as licensename FROM content_skins cs LEFT JOIN content_licenses cl ON cl.id=cs.license WHERE cs.state>=1");
 //console.log(skinsData);
 
 // @ts-ignore

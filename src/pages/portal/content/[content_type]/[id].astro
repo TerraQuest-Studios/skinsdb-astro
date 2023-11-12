@@ -1,0 +1,40 @@
+---
+import Layout from '../../../../layouts/portal.astro';
+import {db} from '../../../../lib/db.js';
+import {User} from '../../../../lib/user.js';
+
+// @ts-ignore
+const session = await Astro.locals.auth.validate();
+// @ts-ignore
+if (!session) return Astro.redirect("/login", 302);
+let user = await new User(session.user.userId);
+if(user.group.id!=1) {
+	return new Response("permission denied", {status: 403}); //TODO: make this a 404 page - default or otherwise
+}
+
+// @ts-ignore
+const { content_type, id } = Astro.params;
+/* console.log(content_type);
+console.log(id); */
+
+let tableExists = await db.query(`SELECT * FROM information_schema.tables WHERE table_name=?`, ["content_" + content_type]);
+//console.log(tableExists);
+if(!tableExists[0]) {
+	// @ts-ignore
+	return new Response("content type not found", {status: 404}); //TODO: make this a 404 page - default or otherwise
+}
+
+//TODO: see if this is better securable
+let content = await db.query(`SELECT * FROM ${tableExists[0].TABLE_NAME} WHERE id=?`, [id]);
+//console.log(content);
+
+if(!content[0]) {
+	// @ts-ignore
+	return new Response("content type not found", {status: 404}); //TODO: make this a 404 page - default or otherwise
+}
+---
+
+<Layout title={content_type + " Content"}>
+	<p>hi</p>
+	<pre>{JSON.stringify(content, null, 2)}</pre>
+</Layout>

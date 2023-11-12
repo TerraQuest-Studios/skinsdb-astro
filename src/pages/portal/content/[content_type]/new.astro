@@ -1,7 +1,7 @@
 ---
-import Layout from '../../../layouts/portal.astro';
-import {db} from '../../../lib/db.js';
-import {User} from '../../../lib/user.js';
+import Layout from '../../../../layouts/portal.astro';
+import {db} from '../../../../lib/db.js';
+import {User} from '../../../../lib/user.js';
 
 // @ts-ignore
 const session = await Astro.locals.auth.validate();
@@ -13,8 +13,9 @@ if(user.group.id!=1) {
 }
 
 // @ts-ignore
-const { content_type } = Astro.params;
-console.log(content_type);
+const { content_type, id } = Astro.params;
+/* console.log(content_type);
+console.log(id); */
 
 let tableExists = await db.query(`SELECT * FROM information_schema.tables WHERE table_name=?`, ["content_" + content_type]);
 //console.log(tableExists);
@@ -24,11 +25,15 @@ if(!tableExists[0]) {
 }
 
 //TODO: see if this is better securable
-let content = await db.query(`SELECT * FROM ${tableExists[0].TABLE_NAME}`);
+//let content = await db.query(`SELECT * FROM ${tableExists[0].TABLE_NAME} WHERE id=?`, [id]);
 //console.log(content);
+
+/* if(!content[0]) {
+	// @ts-ignore
+	return new Response("content type not found", {status: 404}); //TODO: make this a 404 page - default or otherwise
+} */
 ---
 
 <Layout title={content_type + " Content"}>
-	<p>hi</p>
-	<pre>{JSON.stringify(content, null, 2)}</pre>
+	<p>CREATE NEW ITEM HERE</p>
 </Layout>
