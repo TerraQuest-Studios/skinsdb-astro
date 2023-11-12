@@ -9,7 +9,7 @@ export class field_core_text extends field {
         super();
 
         this.schema = schema;
-        this.data = data;
+        this.data = data || "";
     }
 
     generate() {

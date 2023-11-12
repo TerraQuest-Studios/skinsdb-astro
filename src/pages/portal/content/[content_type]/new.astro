@@ -2,6 +2,7 @@
 import Layout from '../../../../layouts/portal.astro';
 import {db} from '../../../../lib/db.js';
 import {User} from '../../../../lib/user.js';
+import {form} from '../../../../lib/form.js';
 import '../../../../lib/string.js';
 
 // @ts-ignore
@@ -25,16 +26,36 @@ if(!tableExists[0]) {
 	return new Response("content type not found", {status: 404}); //TODO: make this a 404 page - default or otherwise
 }
 
-//TODO: see if this is better securable
-//let content = await db.query(`SELECT * FROM ${tableExists[0].TABLE_NAME} WHERE id=?`, [id]);
-//console.log(content);
+if (Astro.request.method === "POST") {
+	//TODO: validate input
+	try {
+		const data = await Astro.request.formData();
+		let queryFields = [];
+		let queryValues = [];
+		
+		for(var pair of data.entries()){
+			//console.log(pair[0], pair[1]);
+			queryFields.push(pair[0]);
+			queryValues.push(pair[1]);
+		}
 
-/* if(!content[0]) {
-	// @ts-ignore
-	return new Response("content type not found", {status: 404}); //TODO: make this a 404 page - default or otherwise
-} */
+		await db.query(`INSERT INTO ${tableExists[0].TABLE_NAME} (${queryFields.join(",")}) VALUES (${queryValues.map(() => "?").join(",")})`, queryValues);
+
+		return Astro.redirect(`/portal/content/${content_type}`, 302);
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error(error.message);
+		}
+	}
+}
+
+let tableSchema = await db.query(`SELECT * FROM information_schema.columns WHERE table_name=?`, ["content_" + content_type]);
+
+let Form = new form(tableSchema, {author: session.user.userId}, `/portal/content/${content_type}/new`);
+let FormMarkup = await Form.generate();
 ---
 
 <Layout title={content_type.ucwords() + " Content"}>
-	<p>CREATE NEW ITEM HERE</p>
+	<h3 class="title is-3">New {content_type} item</h3>
+	<Fragment set:html={FormMarkup}>
 </Layout>

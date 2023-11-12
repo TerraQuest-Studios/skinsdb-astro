@@ -26,7 +26,7 @@ if(!tableExists[0]) {
 
 //TODO: see if this is better securable
 let content = await db.query(`SELECT id,name,state,author FROM ${tableExists[0].TABLE_NAME}`);
-console.log(content);
+//console.log(content);
 ---
 
 <Layout title={content_type.ucwords() + " Content"}>
