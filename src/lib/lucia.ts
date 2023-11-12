@@ -28,6 +28,7 @@ export const auth = lucia({
 	}),
 	env: import.meta.env.DEV ? "DEV" : "PROD",
 	middleware: astro(),
+	/* csrfProtection: false, */
 
 	getUserAttributes: (data) => {
 		return {

@@ -2,6 +2,7 @@
 import Layout from '../../../../layouts/portal.astro';
 import {db} from '../../../../lib/db.js';
 import {User} from '../../../../lib/user.js';
+import {form} from '../../../../lib/form.js';
 import '../../../../lib/string.js';
 
 // @ts-ignore
@@ -24,6 +25,7 @@ if(!tableExists[0]) {
 	// @ts-ignore
 	return new Response("content type not found", {status: 404}); //TODO: make this a 404 page - default or otherwise
 }
+let tableSchema = await db.query(`SELECT * FROM information_schema.columns WHERE table_name=?`, ["content_" + content_type]);
 
 //TODO: see if this is better securable
 let content = await db.query(`SELECT * FROM ${tableExists[0].TABLE_NAME} WHERE id=?`, [id]);
@@ -33,9 +35,18 @@ if(!content[0]) {
 	// @ts-ignore
 	return new Response("content type not found", {status: 404}); //TODO: make this a 404 page - default or otherwise
 }
+
+let Form = new form(tableSchema, content[0], `/portal/content/${content_type}/${id}`);
+let FormMarkup = await Form.generate();
 ---
 
 <Layout title={content_type.ucwords() + " Content"}>
-	<p>hi</p>
-	<pre>{JSON.stringify(content, null, 2)}</pre>
+	<h3 class="title is-3">Editing ID: {content[0].id}</h3>
+	<details>
+		<summary>Dev stuff</summary>
+		<pre>{JSON.stringify(content, null, 2)}</pre>
+		<pre>{JSON.stringify(tableSchema, null, 2)}</pre>
+	</details>
+	<br>
+	<Fragment set:html={FormMarkup}>
 </Layout>
