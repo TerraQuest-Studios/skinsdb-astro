@@ -21,6 +21,9 @@ const { title } = Astro.props.frontmatter || Astro.props;
 		<link rel="stylesheet" href="https://unpkg.com/bulmaswatch/darkly/bulmaswatch.min.css">
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<meta property="og:title" content="SkinsDB">
+		<meta property="og:description" content="Get Your Minetest Skins Here">
+		<meta property="og:image" content="/skin_og_image.png">
 	</head>
 	<body>
 		<Nav />
