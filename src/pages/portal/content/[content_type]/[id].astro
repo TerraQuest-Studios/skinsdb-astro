@@ -36,6 +36,29 @@ if(!content[0]) {
 	return new Response("content type not found", {status: 404}); //TODO: make this a 404 page - default or otherwise
 }
 
+if (Astro.request.method === "POST") {
+	//TODO: validate input
+	try {
+		const data = await Astro.request.formData();
+		let queryFields = [];
+		let queryValues = [];
+		
+		for(var pair of data.entries()){
+			//console.log(pair[0], pair[1]);
+			queryFields.push(pair[0]);
+			queryValues.push(pair[1]);
+		}
+
+		await db.query(`UPDATE ${tableExists[0].TABLE_NAME} SET ${queryFields.join("=?, ")}=? WHERE id=?`, [...queryValues, id]);
+
+		return Astro.redirect(`/portal/content/${content_type}`, 302);
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error(error.message);
+		}
+	}
+}
+
 let Form = new form(tableSchema, content[0], `/portal/content/${content_type}/${id}`);
 let FormMarkup = await Form.generate();
 ---
