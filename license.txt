@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 wsor4035, pilcrowOnPaper(lucia example code)
+Copyright (c) 2023 wsor4035, pilcrowOnPaper(lucia example code), Thomas Rudin(2d skin preview code)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

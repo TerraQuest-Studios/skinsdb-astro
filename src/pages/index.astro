@@ -42,4 +42,43 @@ let skinsData = await db.query("SELECT cs.*, cl.name as licensename, uf.display_
 			justify-content: center;
 		}
 	</style>
+	<script is:inline>
+		document.querySelectorAll(".skin_card.box img").forEach(async (skin) => {
+			skin.src = skin.src;
+			await new Promise((resolve) => { skin.onload = resolve; });
+
+			const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = 16;
+            canvas.height = 32;
+
+            // head
+            ctx.drawImage(skin, 8, 8, 8, 8, 4, 0, 8, 8);
+            // chest
+            ctx.drawImage(skin, 20, 20, 8, 12, 4, 8, 8, 12);
+            // leg left
+            ctx.drawImage(skin, 4, 20, 4, 12, 4, 20, 4, 12);
+            // leg right
+            if (skin.height === 64) {
+                ctx.drawImage(skin, 20, 52, 4, 12, 8, 20, 4, 12);
+            } else {
+                ctx.drawImage(skin, 4, 20, 4, 12, 8, 20, 4, 12);
+            }
+            // arm left
+            ctx.drawImage(skin, 44, 20, 4, 12, 0, 8, 4, 12);
+            // arm right
+            if (skin.height === 64) {
+                ctx.drawImage(skin, 36, 52, 4, 12, 12, 8, 4, 12);
+            } else {
+                ctx.drawImage(skin, 44, 20, 4, 12, 12, 8, 4, 12);
+            }
+
+            let img = canvas.toDataURL("image/png");
+			skin.src=img;
+
+			//add these style rules here so that they are applied if the conversion is sucessful
+			skin.style.height = "100%";
+            skin.style.imageRendering = "pixelated";
+		});
+	</script>
 </Layout>
