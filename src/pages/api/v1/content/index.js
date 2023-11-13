@@ -16,7 +16,7 @@ export async function GET({ params, request }) {
   console.log(page);
 
   let skins = await db.query(
-    `SELECT cs.*, uf.display_name as author, cl.name as license FROM content_skins cs JOIN user_fields uf ON uf.id=cs.author JOIN content_licenses cl ON cs.license=cl.id LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`
+    `SELECT cs.id, cs.name, uf.display_name as author, cl.name as license, SUBSTRING_INDEX(SUBSTRING_INDEX(imagedata, ";", 1), ":", -1) as type, SUBSTRING_INDEX(imagedata, ",", -1) as imagedata FROM content_skins cs JOIN user_fields uf ON uf.id=cs.author JOIN content_licenses cl ON cs.license=cl.id LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`
   );
   let skinsCount = await db.query(`SELECT COUNT(*) as count FROM content_skins`);
 
