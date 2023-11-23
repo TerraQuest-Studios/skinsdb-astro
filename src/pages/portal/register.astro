@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/portal.astro';
+import {db} from '../../lib/db.js';
+import {form} from '../../lib/form.js';
+
+const session = await Astro.locals.auth.validate();
+if (!session) return Astro.redirect("/login", 302);
+
+let userInfo = await db.query("SELECT * FROM user_fields WHERE id=?", [session.user.userId]);
+if(userInfo[0]) {
+    return Astro.redirect("/portal", 302);
+}
+
+if (Astro.request.method === "POST") {
+	//TODO: validate input
+	try {
+		const data = await Astro.request.formData();
+        //console.log(data.get("display_name"));
+
+		await db.query("INSERT INTO user_fields (id, `group`, state, display_name) VALUES (?, 5, 1, ?)", [session.user.userId, data.get("display_name")]);
+
+		return Astro.redirect(`/portal`, 302);
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error(error.message);
+		}
+	}
+}
+
+let tableSchema = await db.query(`SELECT * FROM information_schema.columns WHERE table_name=?`, ["user_fields"]);
+
+let Form = new form(tableSchema, {author: session.user.userId}, `/portal/register`);
+let FormMarkup = await Form.generate();
+
+//fragment doesnt handle styling from outside....?
+//also fix this hack
+FormMarkup += `<style>
+    .select:has([name="state"]), [for="state"], form br:nth-child(1), form br:nth-child(2), form br:nth-child(3), form br:nth-child(4) {
+        display: none;
+    }
+</style>`;
+
+---
+
+<Layout title="Register">
+	<h1>Fill out user fields</h1>
+	<Fragment set:html={FormMarkup}>
+</Layout>

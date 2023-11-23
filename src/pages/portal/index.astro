@@ -1,8 +1,14 @@
 ---
 import Layout from '../../layouts/portal.astro';
+import {db} from '../../lib/db.js';
 
 const session = await Astro.locals.auth.validate();
 if (!session) return Astro.redirect("/login", 302);
+
+let userInfo = await db.query("SELECT * FROM user_fields WHERE id=?", [session.user.userId]);
+if(!userInfo[0] || !userInfo[0].id) {
+	return Astro.redirect("/portal/register", 302);
+}
 ---
 
 <Layout title="Profile">
